@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 const WebSocket = require('ws');
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000; //change to fix next dev server conflict
 const BASE = '/api/v1';
 
 const app = express();
