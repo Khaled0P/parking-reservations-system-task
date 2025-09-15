@@ -1,10 +1,9 @@
 "use client";
 
-import { useGates } from "@/lib/hooks";
+import { useGates } from "@/lib/api/gates";
 
 export default function Home() {
   const { data, isLoading } = useGates();
-console.log(data);
 
   if (isLoading) return <p>Loading...</p>;
 

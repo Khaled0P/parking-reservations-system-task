@@ -6,11 +6,20 @@ interface LoginPayload {
   password: string;
 }
 
+interface LoginResponse {
+  token: string;
+  user: {
+    id: string;
+    username: string;
+    role: "admin" | "employee";
+  };
+}
+
 export function useLogin() {
-  return useMutation({
-    mutationFn: async (payload: LoginPayload) => {
-      const { data } = await client.post("/auth/login", payload);
-      return data; // { user, token }
+  return useMutation<LoginResponse, unknown, LoginPayload>({
+    mutationFn: async (payload) => {
+      const { data } = await client.post<LoginResponse>("/auth/login", payload);
+      return data;
     },
   });
 }
