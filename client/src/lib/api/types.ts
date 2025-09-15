@@ -60,3 +60,23 @@ export interface CheckoutResponse {
   amount: number;
   zoneState: Zone;
 }
+
+// WebSocket types
+export interface AdminUpdatePayload {
+  adminId: string;
+  action:
+    | "category-rates-changed"
+    | "zone-closed"
+    | "zone-opened"
+    | "vacation-added"
+    | "rush-updated";
+  targetType: "category" | "zone" | "vacation" | "rush";
+  targetId: string;
+  details?: Record<string, unknown>;
+  timestamp: string; // ISO
+}
+
+export type WSMessage =
+  | { type: "zone-update"; payload: Zone }
+  | { type: "admin-update"; payload: AdminUpdatePayload }
+  | { type: string; payload?: unknown }; // fallback

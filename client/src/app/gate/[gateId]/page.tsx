@@ -8,9 +8,11 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import TicketModal from '@/components/gate/TicketModal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Ticket } from '@/lib/api/types';
 import { useToast } from '@/hooks/use-toast';
+import { wsClient } from '@/lib/ws';
+import WsStatus from '@/components/gate/WsStatus';
 
 export default function GatePage() {
   const { gateId } = useParams<{ gateId: string }>();
@@ -57,6 +59,14 @@ export default function GatePage() {
     );
   };
 
+   useEffect(() => {
+    if (!gateId) return;
+    wsClient.subscribeGate(gateId);
+    return () => {
+      wsClient.unsubscribeGate(gateId);
+    };
+  }, [gateId]);
+
   if (isLoading) return <p className="p-6">Loading zones...</p>;
   if (error) return <p className="p-6 text-red-500">Failed to load zones</p>;
 
@@ -66,6 +76,7 @@ export default function GatePage() {
       <header className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">{gate?.name || 'Gate'}</h1>
         <span className="text-sm text-gray-500">Gate ID: {gateId}</span>
+        <WsStatus />
       </header>
 
       {/* Tabs: Visitor vs Subscriber */}
