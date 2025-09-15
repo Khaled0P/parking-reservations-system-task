@@ -6,6 +6,7 @@ import { store } from '@/store';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { Toaster } from "@/components/ui/toaster";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </Provider>
+        <Toaster />
       </body>
     </html>
   );

@@ -1,15 +1,16 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import { useGates } from "@/lib/api/gates";
-import { useZones } from "@/lib/api/zones";
-import { useCheckin } from "@/lib/api/tickets";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import TicketModal from "@/components/gate/TicketModal";
-import { useState } from "react";
-import { Ticket } from "@/lib/api/types";
+import { useParams } from 'next/navigation';
+import { useGates } from '@/lib/api/gates';
+import { useZones } from '@/lib/api/zones';
+import { useCheckin } from '@/lib/api/tickets';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import TicketModal from '@/components/gate/TicketModal';
+import { useState } from 'react';
+import { Ticket } from '@/lib/api/types';
+import { useToast } from '@/hooks/use-toast';
 
 export default function GatePage() {
   const { gateId } = useParams<{ gateId: string }>();
@@ -26,16 +27,31 @@ export default function GatePage() {
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const { toast } = useToast();
+
   const handleVisitorCheckin = (zoneId: string) => {
     checkinMutation.mutate(
-      { gateId: gateId, zoneId, type: "visitor" },
+      { gateId: gateId, zoneId, type: 'visitor' },
       {
         onSuccess: (data) => {
           setSelectedTicket(data.ticket);
           setModalOpen(true);
+          toast({
+            title: 'Check-in successful',
+            description: (
+              <span>
+                Ticket <strong>{data.ticket.id}</strong> created for Zone{' '}
+                <strong>{data.ticket.zoneId}</strong>
+              </span>
+            ),
+          });
         },
         onError: (err: any) => {
-          alert(err?.response?.data?.message || "Check-in failed");
+          toast({
+            title: 'Check-in failed',
+            description: err?.response?.data?.message || 'Something went wrong',
+            variant: 'destructive',
+          });
         },
       }
     );
@@ -48,7 +64,7 @@ export default function GatePage() {
     <div className="p-6 space-y-6">
       {/* Header */}
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{gate?.name || "Gate"}</h1>
+        <h1 className="text-2xl font-bold">{gate?.name || 'Gate'}</h1>
         <span className="text-sm text-gray-500">Gate ID: {gateId}</span>
       </header>
 
@@ -72,15 +88,25 @@ export default function GatePage() {
                   <p className="text-sm">Occupied: {zone.occupied}</p>
                   <p className="text-sm">Free: {zone.free}</p>
                   <p className="text-sm">Reserved: {zone.reserved}</p>
-                  <p className="text-sm">Visitors Available: {zone.availableForVisitors}</p>
-                  <p className="text-sm">Subscribers Available: {zone.availableForSubscribers}</p>
-                  <p className="text-sm">Rates: N {zone.rateNormal} / S {zone.rateSpecial}</p>
+                  <p className="text-sm">
+                    Visitors Available: {zone.availableForVisitors}
+                  </p>
+                  <p className="text-sm">
+                    Subscribers Available: {zone.availableForSubscribers}
+                  </p>
+                  <p className="text-sm">
+                    Rates: N {zone.rateNormal} / S {zone.rateSpecial}
+                  </p>
                   <Button
                     className="mt-3 w-full"
-                    disabled={!zone.open || zone.availableForVisitors <= 0 || checkinMutation.isPending}
+                    disabled={
+                      !zone.open ||
+                      zone.availableForVisitors <= 0 ||
+                      checkinMutation.isPending
+                    }
                     onClick={() => handleVisitorCheckin(zone.id)}
                   >
-                    {checkinMutation.isPending ? "Checking in..." : "Check-in"}
+                    {checkinMutation.isPending ? 'Checking in...' : 'Check-in'}
                   </Button>
                 </CardContent>
               </Card>
