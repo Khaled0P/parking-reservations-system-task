@@ -12,10 +12,10 @@ export interface Zone {
   categoryId: string;
   gateIds: string[];
   totalSlots: number;
-  occupied: number;                // server computed
-  free: number;                    // server computed
-  reserved: number;                // server computed
-  availableForVisitors: number;    // server computed
+  occupied: number; // server computed
+  free: number; // server computed
+  reserved: number; // server computed
+  availableForVisitors: number; // server computed
   availableForSubscribers: number; // server computed
   rateNormal: number;
   rateSpecial: number;
@@ -23,7 +23,7 @@ export interface Zone {
 }
 
 // Ticket Types
-export type TicketType = "visitor" | "subscriber";
+export type TicketType = 'visitor' | 'subscriber';
 
 export interface Ticket {
   id: string;
@@ -46,7 +46,7 @@ export interface CheckoutBreakdown {
   from: string;
   to: string;
   hours: number;
-  rateMode: "normal" | "special";
+  rateMode: 'normal' | 'special';
   rate: number;
   amount: number;
 }
@@ -65,18 +65,37 @@ export interface CheckoutResponse {
 export interface AdminUpdatePayload {
   adminId: string;
   action:
-    | "category-rates-changed"
-    | "zone-closed"
-    | "zone-opened"
-    | "vacation-added"
-    | "rush-updated";
-  targetType: "category" | "zone" | "vacation" | "rush";
+    | 'category-rates-changed'
+    | 'zone-closed'
+    | 'zone-opened'
+    | 'vacation-added'
+    | 'rush-updated';
+  targetType: 'category' | 'zone' | 'vacation' | 'rush';
   targetId: string;
   details?: Record<string, unknown>;
   timestamp: string; // ISO
 }
 
 export type WSMessage =
-  | { type: "zone-update"; payload: Zone }
-  | { type: "admin-update"; payload: AdminUpdatePayload }
+  | { type: 'zone-update'; payload: Zone }
+  | { type: 'admin-update'; payload: AdminUpdatePayload }
   | { type: string; payload?: unknown }; // fallback
+
+// subscriptions
+export interface Car {
+  plate: string;
+  brand: string;
+  model: string;
+  color: string;
+}
+
+export interface Subscription {
+  id: string;
+  userName: string;
+  active: boolean;
+  category: string;
+  cars: Car[];
+  startsAt: string;
+  expiresAt: string;
+  currentCheckins: { ticketId: string; zoneId: string }[];
+}
