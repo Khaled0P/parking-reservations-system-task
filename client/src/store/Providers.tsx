@@ -1,13 +1,17 @@
-"use client";
+'use client';
 
-import { Provider as ReduxProvider } from "react-redux";
-import { store } from "@/store";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { wsClient } from "@/lib/ws";
-import { setConnected, setDisconnected } from "@/store/slices/wsSlice";
-import { useAppDispatch } from "@/store/hooks";
-import { useEffect } from "react";
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from '@/store';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { wsClient } from '@/lib/ws';
+import {
+  setConnected,
+  setDisconnected,
+  setReconnecting,
+} from '@/store/slices/wsSlice';
+import { useAppDispatch } from '@/store/hooks';
+import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -16,6 +20,10 @@ function WsManager({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     wsClient.connect(queryClient);
+
+    // listen for reconnecting custom event
+    const handleReconnecting = () => dispatch(setReconnecting());
+    window.addEventListener('ws:reconnecting', handleReconnecting);
 
     wsClient.setStatusHandler((connected) => {
       if (connected) {
@@ -27,6 +35,7 @@ function WsManager({ children }: { children: React.ReactNode }) {
 
     return () => {
       wsClient.setStatusHandler(undefined);
+      window.removeEventListener('ws:reconnecting', handleReconnecting);
       wsClient.disconnect();
     };
   }, [dispatch]);

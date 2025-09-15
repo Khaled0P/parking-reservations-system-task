@@ -62,13 +62,19 @@ class WSClient {
 
       this._flushPending();
       for (const gateId of Array.from(this.subscriptions)) {
-        this._send({ type: "subscribe", payload: { gateId } });
+        this._send({ type: 'subscribe', payload: { gateId } });
       }
     };
 
     this.socket.onclose = () => {
       this.connected = false;
-      this.statusHandler?.(false); // ✅ notify app
+      this.statusHandler?.(false); // notify app
+
+      // dispatch reconnecting state
+      try {
+        const event = new CustomEvent('ws:reconnecting');
+        window.dispatchEvent(event);
+      } catch {}
 
       if (this.manualClose) return;
       const delay = Math.min(1000 * 2 ** this.reconnectAttempts, 30_000);
@@ -83,12 +89,12 @@ class WSClient {
         const parsed: WSMessage = JSON.parse(event.data);
         this._handleMessage(parsed);
       } catch (e) {
-        console.warn("ws: failed to parse message", e);
+        console.warn('ws: failed to parse message', e);
       }
     };
 
     this.socket.onerror = (err) => {
-      console.warn("ws: error", err);
+      console.warn('ws: error', err);
     };
   }
 

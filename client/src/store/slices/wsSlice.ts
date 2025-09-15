@@ -3,12 +3,14 @@ import type { AdminUpdatePayload } from "@/lib/api/types";
 
 interface WsState {
   connected: boolean;
+  reconnecting: boolean;
   lastConnectedAt: string | null;
-  audit: AdminUpdatePayload[]; // live admin events
+  audit: AdminUpdatePayload[];
 }
 
 const initialState: WsState = {
   connected: false,
+  reconnecting: false,
   lastConnectedAt: null,
   audit: [],
 };
@@ -19,10 +21,15 @@ const wsSlice = createSlice({
   reducers: {
     setConnected(state) {
       state.connected = true;
+      state.reconnecting = false;
       state.lastConnectedAt = new Date().toISOString();
     },
     setDisconnected(state) {
       state.connected = false;
+    },
+    setReconnecting(state) {
+      state.connected = false;
+      state.reconnecting = true;
     },
     addAdminUpdate(state, action: PayloadAction<AdminUpdatePayload>) {
       state.audit.unshift(action.payload);
@@ -36,6 +43,11 @@ const wsSlice = createSlice({
   },
 });
 
-export const { setConnected, setDisconnected, addAdminUpdate, clearAudit } =
-  wsSlice.actions;
+export const {
+  setConnected,
+  setDisconnected,
+  setReconnecting,
+  addAdminUpdate,
+  clearAudit,
+} = wsSlice.actions;
 export default wsSlice.reducer;
