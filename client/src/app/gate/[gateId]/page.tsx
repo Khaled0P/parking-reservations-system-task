@@ -3,9 +3,13 @@
 import { useParams } from "next/navigation";
 import { useGates } from "@/lib/api/gates";
 import { useZones } from "@/lib/api/zones";
+import { useCheckin } from "@/lib/api/tickets";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import TicketModal from "@/components/gate/TicketModal";
+import { useState } from "react";
+import { Ticket } from "@/lib/api/types";
 
 export default function GatePage() {
   const { gateId } = useParams<{ gateId: string }>();
@@ -16,6 +20,26 @@ export default function GatePage() {
 
   // fetch zones for this gate
   const { data: zones, isLoading, error } = useZones(gateId);
+
+  // visitor check-in
+  const checkinMutation = useCheckin();
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleVisitorCheckin = (zoneId: string) => {
+    checkinMutation.mutate(
+      { gateId: gateId, zoneId, type: "visitor" },
+      {
+        onSuccess: (data) => {
+          setSelectedTicket(data.ticket);
+          setModalOpen(true);
+        },
+        onError: (err: any) => {
+          alert(err?.response?.data?.message || "Check-in failed");
+        },
+      }
+    );
+  };
 
   if (isLoading) return <p className="p-6">Loading zones...</p>;
   if (error) return <p className="p-6 text-red-500">Failed to load zones</p>;
@@ -53,9 +77,10 @@ export default function GatePage() {
                   <p className="text-sm">Rates: N {zone.rateNormal} / S {zone.rateSpecial}</p>
                   <Button
                     className="mt-3 w-full"
-                    disabled={!zone.open || zone.availableForVisitors <= 0}
+                    disabled={!zone.open || zone.availableForVisitors <= 0 || checkinMutation.isPending}
+                    onClick={() => handleVisitorCheckin(zone.id)}
                   >
-                    Check-in
+                    {checkinMutation.isPending ? "Checking in..." : "Check-in"}
                   </Button>
                 </CardContent>
               </Card>
@@ -68,6 +93,13 @@ export default function GatePage() {
           <p>Subscriber flow coming soon...</p>
         </TabsContent>
       </Tabs>
+
+      {/* Ticket Modal */}
+      <TicketModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        ticket={selectedTicket}
+      />
     </div>
   );
 }

@@ -95,3 +95,15 @@ a {
   }
 }
 
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  div {
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+  }
+}
+
