@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import api from "./api";
+import client from "./client";
+import { Gate } from "./types";
 
 export function useGates() {
-  return useQuery({
+  return useQuery<Gate[]>({
     queryKey: ["gates"],
     queryFn: async () => {
-      const { data } = await api.get("/master/gates");
+      const { data } = await client.get<Gate[]>("/master/gates");
       return data;
     },
   });
