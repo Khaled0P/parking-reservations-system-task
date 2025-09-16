@@ -26,7 +26,7 @@ export default function ZoneCard({
       <CardHeader>
         <CardTitle>{zone.name}</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className='min-h-[220px] flex flex-col'>
         <p className="text-sm">Category: {zone.categoryId}</p>
         <p className="text-sm">Occupied: {zone.occupied}</p>
         <p className="text-sm">Free: {zone.free}</p>
@@ -44,7 +44,7 @@ export default function ZoneCard({
           </p>
         )}
 
-        <p className="text-sm">
+        <p className="text-sm mb-auto">
           Rates: N {zone.rateNormal} / S {zone.rateSpecial}
         </p>
 

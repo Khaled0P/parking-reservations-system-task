@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import client from './client';
 import { Subscription } from './types';
 
-export const useSubscription = (id: string | null) => {
+export const useSubscription = (id: string | null, opts?: { enabled?: boolean }) => {
   return useQuery<Subscription, Error>({
     queryKey: ['subscription', id],
     queryFn: async () => {
@@ -10,7 +10,8 @@ export const useSubscription = (id: string | null) => {
       const res = await client.get(`/subscriptions/${id}`);
       return res.data;
     },
-    enabled: !!id, // only run when id is provided
+    enabled: opts?.enabled ?? false, // avoid verifying on input change
     retry: false,  // don’t spam requests for invalid ids
+    staleTime: 1000 * 60 * 2,
   });
 };
