@@ -31,13 +31,13 @@ export function useCheckout() {
 }
 
 // fetch single ticket
-export function useTicket(id: string) {
+export function useTicket(id: string, opts?: { enabled?: boolean }) {
   return useQuery<Ticket>({
     queryKey: ["ticket", id],
     queryFn: async () => {
       const { data } = await client.get<Ticket>(`/tickets/${id}`);
       return data;
     },
-    enabled: !!id,
+    enabled: opts?.enabled ?? false,
   });
 }

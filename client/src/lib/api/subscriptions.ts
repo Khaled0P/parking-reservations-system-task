@@ -10,7 +10,7 @@ export const useSubscription = (id: string | null, opts?: { enabled?: boolean })
       const res = await client.get(`/subscriptions/${id}`);
       return res.data;
     },
-    enabled: opts?.enabled ?? false, // avoid verifying on input change
+    enabled: opts?.enabled ?? true, // avoid verifying on input change
     retry: false,  // don’t spam requests for invalid ids
     staleTime: 1000 * 60 * 2,
   });
