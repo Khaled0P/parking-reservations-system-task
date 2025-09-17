@@ -1,4 +1,3 @@
-// src/lib/ws.ts
 import type { QueryClient } from '@tanstack/react-query';
 import type { Zone, AdminUpdatePayload, WSMessage } from '@/lib/api/types';
 
@@ -58,7 +57,7 @@ class WSClient {
       this.reconnectAttempts = 0;
       this.connected = true;
 
-      this.statusHandler?.(true); // ✅ notify app
+      this.statusHandler?.(true); // notify app
 
       this._flushPending();
       for (const gateId of Array.from(this.subscriptions)) {

@@ -6,7 +6,7 @@ import { useTicket } from "@/lib/api/tickets";
 
 export default function PrintTicketPage() {
   const { ticketId } = useParams<{ ticketId: string }>();
-  const { data, isLoading, isError } = useTicket(ticketId);
+  const { data, isLoading, isError } = useTicket(ticketId, {enabled: true});
 
   useEffect(() => {
     if (!isLoading && !isError && data) {

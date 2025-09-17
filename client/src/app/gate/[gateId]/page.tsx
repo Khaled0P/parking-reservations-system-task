@@ -70,7 +70,6 @@ export default function GatePage() {
           <SubscriberTab
             zones={zones || []}
             gateId={gateId}
-            checkinMutation={checkinMutation}
             onTicket={handleTicket}
           />
         </TabsContent>
