@@ -31,7 +31,6 @@ export default function AdminZoneCard({ zone, onToggle }: AdminZoneCardProps) {
         <div>Reserved: <strong>{zone.reserved}</strong></div>
         <div>Visitors: <strong>{zone.availableForVisitors}</strong></div>
         <div>Subscribers: <strong>{zone.availableForSubscribers}</strong></div>
-        <div>Rates: N:{zone.rateNormal} / S:{zone.rateSpecial}</div>
       </div>
 
       {zone?.specialActive && (
