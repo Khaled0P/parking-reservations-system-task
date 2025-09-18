@@ -5,8 +5,9 @@ import { useTicket } from '@/lib/api/tickets';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import TicketDetailsModal from '@/components/checkpoint/TicketDetailsModal';
+import { withAuth } from '@/components/auth/withAuth';
 
-export default function CheckpointPage() {
+ function CheckpointPage() {
   const [ticketIdInput, setTicketIdInput] = useState('');
   const [selectedTicketId, setSelectedTicketId] = useState<string | null>(null);
 
@@ -42,3 +43,5 @@ export default function CheckpointPage() {
     </div>
   );
 }
+
+export default withAuth(CheckpointPage, { role: "employee" }); // export protected

@@ -23,8 +23,8 @@ function WsManager({ children }: { children: React.ReactNode }) {
   
   // initialize Redux from storage at app boot
   useEffect(() => {
-    store.dispatch(loadAuthFromStorage());
-  }, []);
+    dispatch(loadAuthFromStorage());
+  }, [dispatch]);
 
   useEffect(() => {
     wsClient.connect(queryClient);
