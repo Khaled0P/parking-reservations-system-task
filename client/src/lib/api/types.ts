@@ -99,3 +99,31 @@ export interface Subscription {
   expiresAt: string;
   currentCheckins: { ticketId: string; zoneId: string }[];
 }
+
+
+// admin types 
+
+// zone, used for admin zone cards and parking state reports
+export interface AdminZone {
+  zoneId: string;
+  name: string;
+  totalSlots: number;
+  occupied: number;
+  free: number;
+  reserved: number;
+  availableForVisitors: number;
+  availableForSubscribers: number;
+  open: boolean;
+  subscriberCount: number;
+  rateNormal?: number;
+  rateSpecial?: number;
+  categoryId?: string;
+  specialActive?: boolean;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  rateNormal: number;
+  rateSpecial: number;
+}

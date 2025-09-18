@@ -12,11 +12,19 @@ import {
 } from '@/store/slices/wsSlice';
 import { useAppDispatch } from '@/store/hooks';
 import { useEffect } from 'react';
+import { loadAuthFromStorage } from './slices/authSlice';
 
 const queryClient = new QueryClient();
 
+
 function WsManager({ children }: { children: React.ReactNode }) {
   const dispatch = useAppDispatch();
+
+  
+  // initialize Redux from storage at app boot
+  useEffect(() => {
+    store.dispatch(loadAuthFromStorage());
+  }, []);
 
   useEffect(() => {
     wsClient.connect(queryClient);
