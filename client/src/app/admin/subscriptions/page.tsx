@@ -1,12 +1,13 @@
 "use client";
 
+import { Loading } from "@/components/ui/Loading";
 import { useAdminSubscriptions } from "@/lib/api/admin";
 import { Subscription } from "@/lib/api/types";
 
 export default function SubscriptionsPage() {
   const { data, isLoading, isError, error } = useAdminSubscriptions();
 
-  if (isLoading) return <div>Loading subscriptions...</div>;
+  if (isLoading) return <Loading title="Loading subscriptions..." />
   if (isError) return <div className="text-red-600">Error: {(error as Error).message}</div>;
 
   return (

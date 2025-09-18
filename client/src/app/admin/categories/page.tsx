@@ -1,5 +1,6 @@
 "use client";
 
+import { Loading } from "@/components/ui/Loading";
 import { useCategories, useUpdateCategory } from "@/lib/api/admin";
 import { useState } from "react";
 
@@ -13,7 +14,7 @@ export default function CategoriesPage() {
     rateSpecial: 0,
   });
 
-  if (isLoading) return <div>Loading categories...</div>;
+  if (isLoading) return <Loading title="Loading categories..." />
   if (isError) return <div className="text-red-600">Error: {(error as Error).message}</div>;
 
   return (

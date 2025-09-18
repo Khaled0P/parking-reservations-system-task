@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { useTicket } from "@/lib/api/tickets";
+import { Loading } from "@/components/ui/Loading";
 
 export default function PrintTicketPage() {
   const { ticketId } = useParams<{ ticketId: string }>();
@@ -15,7 +16,7 @@ export default function PrintTicketPage() {
     }
   }, [isLoading, isError, data]);
 
-  if (isLoading) return <p>Loading ticket...</p>;
+  if (isLoading) return <Loading title="Loading ticket..." />
   if (isError) return <p className="text-red-500">Failed to load ticket</p>;
 
   const ticket = data;

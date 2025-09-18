@@ -13,6 +13,7 @@ import WsStatus from '@/components/gate/WsStatus';
 import VisitorTab from '@/components/gate/VisitorTab';
 import SubscriberTab from '@/components/gate/SubscriberTab';
 import GateDropdown from '@/components/gate/GateDropdown';
+import { Loading } from '@/components/ui/Loading';
 
 export default function GatePage() {
   const { gateId } = useParams<{ gateId: string }>();
@@ -39,7 +40,7 @@ export default function GatePage() {
     };
   }, [gateId]);
 
-  if (isLoading) return <p className="p-6">Loading zones...</p>;
+  if (isLoading) return <Loading title="Loading zones..." />
   if (error) return <p className="p-6 text-red-500">Failed to load zones</p>;
 
   return (
