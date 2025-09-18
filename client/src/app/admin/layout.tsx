@@ -2,9 +2,10 @@
 
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import LogoutButton from '@/components/auth/LogoutButton';
+import { withAuth } from '@/components/auth/withAuth';
 import WsStatus from '@/components/gate/WsStatus';
 
-export default function AdminLayout({
+function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -24,3 +25,5 @@ export default function AdminLayout({
     </div>
   );
 }
+
+export default withAuth(AdminLayout, { role: "admin" }); //export protected

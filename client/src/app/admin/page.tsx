@@ -6,9 +6,8 @@ import { wsClient } from "@/lib/ws";
 import { Gate } from "@/lib/api/types";
 import ParkingStateReport from "@/components/admin/ParkingStateReport";
 import AdminAuditLog from "@/components/admin/AdminAuditLog";
-import { withAuth } from "@/components/auth/withAuth";
 
-function AdminDashboard() {
+export default function AdminDashboard() {
 
   // subscribe to all gates to get updates on the log
   useEffect(() => {
@@ -43,5 +42,3 @@ function AdminDashboard() {
     </div>
   );
 }
-
-export default withAuth(AdminDashboard, { role: "admin" }); //export protected

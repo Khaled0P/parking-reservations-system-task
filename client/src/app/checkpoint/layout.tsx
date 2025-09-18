@@ -1,9 +1,10 @@
 "use client";
 
 import LogoutButton from '@/components/auth/LogoutButton';
+import { withAuth } from '@/components/auth/withAuth';
 import WsStatus from '@/components/gate/WsStatus';
 
-export default function CheckpointLayout({
+function CheckpointLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -22,3 +23,5 @@ export default function CheckpointLayout({
     </div>
   );
 }
+
+export default withAuth(CheckpointLayout, { role: "employee" }); // export protected
