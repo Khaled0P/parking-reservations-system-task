@@ -12,6 +12,7 @@ import { wsClient } from '@/lib/ws';
 import WsStatus from '@/components/gate/WsStatus';
 import VisitorTab from '@/components/gate/VisitorTab';
 import SubscriberTab from '@/components/gate/SubscriberTab';
+import GateDropdown from '@/components/gate/GateDropdown';
 
 export default function GatePage() {
   const { gateId } = useParams<{ gateId: string }>();
@@ -44,9 +45,9 @@ export default function GatePage() {
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
-      <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">{gate?.name || 'Gate'}</h1>
-        <span className="text-sm text-gray-500">Gate ID: {gateId}</span>
+      <header className="flex items-center justify-between gap-4">
+          <h1 className="text-2xl font-bold">Check-in Gate</h1>
+          <GateDropdown gates={gates} currentGateId={gateId} />
         <WsStatus />
       </header>
 
